@@ -1,45 +1,86 @@
 #include "main.h"
 
 /**
-* charac -prints a character
-* @print: argument to print
-* Return: argument
-*/
+ * charac - prints a character
+ * @print: arguments pointing to the character
+ * Return: Number of characters printed (1)
+ */
 int charac(va_list print)
 {
-	int c;
+	char c;
 
 	c = va_arg(print, int);
-	return (_putchar(c));
+	_putchar(c);
+	return (1);
 }
 
 /**
-* strin - prints a string
-* @print: argument
-* Return: string
-*/
+ * strin - prints a string
+ * @print: arguments pointing to the string
+ * Return: Number of characters printed
+ */
 int strin(va_list print)
 {
-	char *str;
-	int i = 0;
+	char *s;
+	int i;
 
-	str = va_arg(print, char *);
-	while (str[i] != '\0')
+	s = va_arg(print, char *);
+	if (s == NULL)
 	{
-		_putchar(str[i]);
-		i++;
+		s = "(null)";
+	}
+
+	for (i = 0; s[i] != '\0'; i++)
+	{
+		_putchar(s[i]);
 	}
 	return (i);
 }
 
 /**
-* percen - prints %
-* @print: argument
-* Return: %
-*/
+ * integ - Prints an integer
+ * @print: arguments pointing to the integer
+ * Return: Number of characters printed
+ */
+int integ(va_list print)
+{
+	unsigned int d;
+	int n, i = 1, c = 0;
+
+	n = va_arg(print, int);
+
+	if  (n < 0)
+	{
+		d = -(n);
+		_putchar('-');
+		c++;
+	}
+	else
+		d = n;
+
+	for (; (d / i) > 9; )
+	{
+		i =  i * 10;
+	}
+
+	while (i >= 1)
+	{
+		_putchar(((d / i) % 10) + '0');
+		i = i / 10;
+		c++;
+	}
+	return (c);
+}
+
+/**
+ * percen - prints percentage character
+ * @print: arguments pointing to the character
+ * Return: Number of characters printed
+ */
 int percen(va_list print)
 {
 	(void)print;
 
-	return (_putchar('%'));
+	_putchar('%');
+	return (1);
 }

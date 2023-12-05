@@ -1,47 +1,52 @@
 #include "main.h"
+#include <unistd.h>
+#include <stdarg.h>
+
 /**
-* _printf- produces output according to a format
-* @format: character string
-* Return: number of printed characters
-*/
+ * _printf - prints formatted string
+ * @format: The string
+ * Return: The number of printed characters
+ */
 int _printf(const char *format, ...)
 {
-	spec array[] = {
-			{'c', charac},
-			{'s', strin},
-			{'%', percen},
-			{'\0', NULL}
-	};
-	int count = 0;
-	size_t i = 0;
-	va_list args;
+	int i = 0, count = 0;
+	va_list print;
+	int (*fnc)(va_list);
 
-	va_start(args, format);
-
-	while (*format)
+	va_start(print, format);
+	if (format == NULL)
 	{
-		if (*format == '%')
+		return (-1);
+	}
+
+	while (format[i])
+	{
+		if (format[i] == '%')
 		{
-			format++;
-			while (array[i].c != '\0' && array[i].c != *format)
+			if (format[i + 1] == '\0')
+				return (-1);
+			fnc = specifier(format[i + 1]);
+			if (fnc != NULL)
 			{
+				count += fnc(print);
+				i += 2;
+				continue;
+			}
+			else
+			{
+				count += _putchar('%');
 				i++;
-				if (array[i].c != '\0')
-				{
-					count += array[i].fptr(args);
-				}
-				else
-				{
-					count += _putchar('%') + _putchar(*format);
-				}
+				continue;
 			}
 		}
 		else
 		{
-			count += _putchar(*format);
+			_putchar(format[i]);
+			count++;
+			i++;
+			continue;
 		}
-		format++;
 	}
-	va_end(args);
+	va_end(print);
 	return (count);
 }
